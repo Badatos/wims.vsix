@@ -1,0 +1,25 @@
+{
+    "name": "wims",
+    "displayName": "WIMS Module language",
+    "description": "Syntax highlighter for WIMS module development",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.61.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "wims",
+            "aliases": ["WIMS", "wims"],
+            "extensions": [".proc",".check",".phtml",".input",".ca",".cn",".de",".en",".es",".fr",".it",".nl",".si",".tw",".template",".def",".local",".dat"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "wims",
+            "scopeName": "source.wims",
+            "path": "./syntaxes/WIMS.tmLanguage"
+        }]
+    }
+}

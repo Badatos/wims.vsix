@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>proc</string>
+		<string>check</string>
+		<string>phtml</string>
+		<string>input</string>
+		<string>ca</string>
+		<string>cn</string>
+		<string>de</string>
+		<string>en</string>
+		<string>es</string>
+		<string>fr</string>
+		<string>it</string>
+		<string>nl</string>
+		<string>si</string>
+		<string>tw</string>
+		<string>template</string>
+		<string>def</string>
+		<string>local</string>
+		<string>dat</string>		
+	</array>
+	<key>name</key>
+	<string>WIMS</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>comment</key>
+			<string>Variables like $(PARAM1), $(TM_SELECTION)...</string>
+			<key>match</key>
+			<string>(\$\([a-zA-Z0-9_$]+\))</string>
+			<key>name</key>
+			<string>variable.parameter.wims</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Variables like $PARAM1, $TM_SELECTION...</string>
+			<key>match</key>
+			<string>(\$)([a-zA-Z0-9_]*)</string>
+			<key>name</key>
+			<string>variable.parameter.wims</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Commentaires commencant par #...</string>
+			<key>match</key>
+			<string>^\s*(#.*)</string>
+			<key>name</key>
+			<string>comment.line.number-sign</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Commentaires commencant par !!...</string>
+			<key>match</key>
+			<string>^\s*(!!.*)</string>
+			<key>name</key>
+			<string>comment.line.wims</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>mots réservés du langage</string>
+			<key>match</key>
+			<string>\b(to|of|within|in|into|by|default|internal|between|select|where)\b</string>
+			<key>name</key>
+			<string>constant.language</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>types d'éléments reconnus</string>
+			<key>match</key>
+			<string>\b(line|lines|column|word|words|item|items)\b</string>
+			<key>name</key>
+			<string>storage.type</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>etats possibles pour les initialisation de parametres de requete</string>
+			<key>match</key>
+			<string>\b(any|allow|deny|init|config|reply)\b</string>
+			<key>name</key>
+			<string>support.type</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>constantes numériques</string>
+			<key>match</key>
+			<string>\b[0-9]+\b</string>
+			<key>name</key>
+			<string>constant.numeric</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>some other recognized wims functions, like "rint()" or "max()"...</string>
+			<key>match</key>
+			<string>\b(abs|sign|sqrt|rint|floor|ceil|exp|log|ln|lg|log10|sin|cos|tan|tg|cotan|ctg|cot|asin|arcsin|acos|arccos|atan|arctan|arctg|sh|sinh|ch|cosh|th|tanh|asinh|argsh|acosh|argch|Argch|atanh|argth|Argth|max|min|gcd|lcm)\b</string>
+			<key>name</key>
+			<string>entity.name.function.wims</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>comparisons operators...</string>
+			<key>match</key>
+			<string>(==|!=|&lt;|&lt;=|&gt;|&gt;=)</string>
+			<key>name</key>
+			<string>keyword.operator.compare.wims</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>comparisons operators...</string>
+			<key>match</key>
+			<string>\b(isin|notin|iswordof|notwordof|isvarof|notvarof|isvariableof|notvariableof|isitemof|notitemof|islineof|notlineof|issamecase|notsamecase|issametext|notsametext|or|and)\b</string>
+			<key>name</key>
+			<string>keyword.operator.compare.wims</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>outils tiers reconnus par WIMS</string>
+			<key>match</key>
+			<string>\b(pari|maxima|yacas|wims|draw|slib|teximg)\b</string>
+			<key>name</key>
+			<string>keyword.operator.external.wims</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Wims functions, starting with "!" (like "!changeto")...</string>
+			<key>match</key>
+			<string>(!)(append|bound|break|changeto|char|charcnt|checkdata|checkhost|column|date|deaccent|debug|declosing|default|defof|defread|detag|distribute|embraced|eval|evalsubst|exchange|exec|exit|fileappend|appendfile|filewrite|writefile|filelist|fileexists|getfile|for|form|formbar|formcheckbox|formend|formradio|formselect|getopt|goto|header|header1|headmenu|hex|homeref|href|htmlmath|if|ifval|increase|insdraw|insmath|insplot|insplot3d|instex|instexstatic|item|itemcnt|items2lines|items2words|itemstowords|let|leveldata|line|linecnt|lines2items|linestoitems|lines2rows|lines2words|listcomplement|listfile|listintersect|listunion|listuniq|lookup|lower|mailto|mailurl|makelist|mathmlmath|mathsubst|mexec|module|msg|nonempty|nospace|nosubst|numlist|pedia|positionof|product|randchar|randfile|randint|randitem|randline|random|randword|rawmath|rawmatrix|reaccent|read|readdef|readproc|record|recordcnt|recursion|reinput|rename|replace|reset|restart|rows2lines|select|setdef|getdef|set|shuffle|singlespace|solve|sort|sql.bak|sum|tail|texmath|text|title|translate|trim|upper|usererror|values|varlist|warn|while|whileval|endwhile|word|wordcnt|words2items|words2lines|endif|next|else|sh|advance|tolower|robottrap)\b</string>
+			<key>name</key>
+			<string>entity.name.function.wimscommand</string>
+		</dict>
+		<dict>
+			<key>comment</key>
+			<string>Special Wims functions, starting with "!" (like "!getscore")...</string>
+			<key>match</key>
+			<string>(!)(getscorepercent|getscore|getscoremean|getscoreremain|getscorebest|getscorelevel|getscoretry|examscore|getscorestatus|getscorerequire|imgrename|shortout|passcrypt)\b</string>
+			<key>name</key>
+			<string>entity.name.function.classcommand</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.wims</string>
+	<key>uuid</key>
+	<string>25C4EED9-2159-41EF-9027-FD66BD5430F1</string>
+</dict>
+</plist>
