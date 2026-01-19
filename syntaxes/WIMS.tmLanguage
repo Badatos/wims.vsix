@@ -21,7 +21,8 @@
 		<string>template</string>
 		<string>def</string>
 		<string>local</string>
-		<string>dat</string>		
+		<string>dat</string>
+		<string>var</string>
 	</array>
 	<key>name</key>
 	<string>WIMS</string>

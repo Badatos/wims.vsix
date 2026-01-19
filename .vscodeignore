@@ -1,0 +1,8 @@
+.git
+.gitignore
+.github/workflows
+.DS_Store
+*.vsix
+node_modules/
+syntaxes/WIMS.tmLanguage.json
+vsc-extension-quickstart.md

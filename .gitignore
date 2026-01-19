@@ -1,0 +1,5 @@
+node_modules/
+*.vsix
+syntaxes/WIMS.tmLanguage.json
+package-lock.json
+.DS_Store

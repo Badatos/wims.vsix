@@ -3,6 +3,13 @@
     "displayName": "WIMS Module language",
     "description": "Syntax highlighter for WIMS module development",
     "version": "0.0.1",
+    "publisher": "Badatos",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Badatos/wims.vsix"
+    },
+    "license": "LGPL-3.0-or-later",
+    "author": "Olivier Bado-Faustin",
     "engines": {
         "vscode": "^1.61.0"
     },
@@ -13,7 +20,7 @@
         "languages": [{
             "id": "wims",
             "aliases": ["WIMS", "wims"],
-            "extensions": [".proc",".check",".phtml",".input",".ca",".cn",".de",".en",".es",".fr",".it",".nl",".si",".tw",".template",".def",".local",".dat"],
+            "extensions": [".proc",".check",".phtml",".input",".ca",".cn",".de",".en",".es",".fr",".it",".nl",".si",".tw",".template",".def",".local",".dat",".var"],
             "configuration": "./language-configuration.json"
         }],
         "grammars": [{

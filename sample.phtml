@@ -1,0 +1,32 @@
+
+test=!lower $test
+
+!if $test=dev1 or $test=dev2
+  test=OK
+  !changeto dummy.phtml
+  !exit
+!endif
+
+!read defs
+
+!bound test within dev1,dev2,dev3 default $
+test=!items2words $test
+test=!words2items $test
+test=!word 1 of $test
+
+!if $test notin $list or $test != $empty
+  !default test=1234
+!else
+  test=5679
+!endif
+
+!if $test isitemof $list
+  !shortout HELLO WORLD
+  !sh cat dummy.phtml
+!endif
+
+!if $test notwordof $phrase
+  !if $test iswordof $phrase
+    !shortout THIS IS THE END.
+  !endif
+!endif

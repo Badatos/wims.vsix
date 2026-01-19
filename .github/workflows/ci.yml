@@ -1,0 +1,143 @@
+name: Validate WIMS Grammar
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'syntaxes/**'
+      - 'language-configuration.json'
+      - 'package.json'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'syntaxes/**'
+      - 'language-configuration.json'
+      - 'package.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 18.x ]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install npm deps for CI
+        run: |
+          npm install --no-audit --no-fund --silent plist
+
+      - name: Validate WIMS.tmLanguage XML plist
+        run: |
+          # Check XML structure with xmllint (built-in on Ubuntu)
+          xmllint --noout syntaxes/WIMS.tmLanguage
+          echo "✓ XML plist structure is valid"
+
+      - name: Compile/convert grammar (plist -> JSON)
+        run: |
+          node -e "const fs=require('fs'), plist=require('plist'); const content=fs.readFileSync('syntaxes/WIMS.tmLanguage','utf8'); const obj=plist.parse(content); fs.writeFileSync('syntaxes/WIMS.tmLanguage.json', JSON.stringify(obj, null, 2)); console.log('✓ Grammar converted to JSON');"
+
+      - name: Verify package.json syntax
+        run: |
+          node -e "require('./package.json'); console.log('✓ package.json is valid')"
+
+      - name: Verify language-configuration.json syntax
+        run: |
+          node -e "require('./language-configuration.json'); console.log('✓ language-configuration.json is valid')"
+
+      - name: Check fileTypes consistency
+        run: |
+          node << 'EOF'
+          const tmLanguage = require('plist').parse(require('fs').readFileSync('syntaxes/WIMS.tmLanguage', 'utf8'));
+          const pkgJson = require('./package.json');
+
+          const tmFileTypes = new Set(tmLanguage.fileTypes || []);
+          const pkgExtensions = new Set(pkgJson.contributes.languages[0].extensions.map(e => e.replace(/^\./, '')));
+
+          let consistent = true;
+          tmFileTypes.forEach(type => {
+            if (!pkgExtensions.has(type)) {
+              console.error(`✗ File type ".${type}" in WIMS.tmLanguage but not in package.json`);
+              consistent = false;
+            }
+          });
+
+          pkgExtensions.forEach(ext => {
+            if (!tmFileTypes.has(ext)) {
+              console.error(`✗ Extension ".${ext}" in package.json but not in WIMS.tmLanguage`);
+              consistent = false;
+            }
+          });
+
+          if (consistent) {
+            console.log('✓ fileTypes are consistent between WIMS.tmLanguage and package.json');
+          } else {
+            process.exit(1);
+          }
+          EOF
+
+      # 'plist' is installed earlier; no separate install step required here
+
+      - name: Lint grammar patterns
+        run: |
+          node << 'EOF'
+          const fs = require('fs');
+          const plist = require('plist');
+
+          const content = fs.readFileSync('syntaxes/WIMS.tmLanguage', 'utf8');
+          const grammar = plist.parse(content);
+
+          let errors = 0;
+
+          (grammar.patterns || []).forEach((pattern, index) => {
+            if (!pattern.match && !pattern.begin) {
+              console.warn(`⚠ Pattern ${index}: no 'match' or 'begin' regex found`);
+            }
+            if (!pattern.name) {
+              console.warn(`⚠ Pattern ${index}: no 'name' (scope) specified`);
+            }
+            if (pattern.match) {
+              try {
+                new RegExp(pattern.match);
+              } catch (e) {
+                console.error(`✗ Pattern ${index}: Invalid regex "${pattern.match}": ${e.message}`);
+                errors++;
+              }
+            }
+          });
+
+          if (errors === 0) {
+            console.log('✓ All regex patterns are valid');
+          } else {
+            process.exit(1);
+          }
+          EOF
+
+      - name: Display grammar summary
+        run: |
+          node << 'EOF'
+          const plist = require('plist');
+          const fs = require('fs');
+
+          const grammar = plist.parse(fs.readFileSync('syntaxes/WIMS.tmLanguage', 'utf8'));
+          const patterns = grammar.patterns || [];
+
+          console.log('\n📊 Grammar Summary:');
+          console.log(`   Total patterns: ${patterns.length}`);
+          console.log(`   Supported file types: ${(grammar.fileTypes || []).length}`);
+          console.log(`   Language ID: ${grammar.scopeName}`);
+          EOF
+
+      - name: Cleanup compiled grammar
+        run: rm -f syntaxes/WIMS.tmLanguage.json
+        if: always()
+
+      - name: ✅ Validation successful
+        run: echo "All checks passed!"
